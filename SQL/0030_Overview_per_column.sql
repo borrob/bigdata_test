@@ -7,7 +7,8 @@ CREATE VIEW "overview_workclass" AS (
 		SELECT
 			a.workclass,
 			count(a.*),
-			b.numrec,count(a.*)::double precision/b.numrec AS p,
+			b.numrec,
+			count(a.*)::double precision/b.numrec AS p,
 			count(a.*)::double precision/b.numrec * log(count(a.*)::double precision/b.numrec) AS p_log_p
 		FROM 
 			adults as a,
@@ -20,6 +21,7 @@ CREATE VIEW "overview_workclass" AS (
 		--group by workclass and add info on recordcount, chances, the >50l chance and the conditonal entropy
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -51,6 +53,7 @@ CREATE VIEW "overview_education" AS (
 	SELECT
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -82,6 +85,7 @@ CREATE VIEW "overview_marital-status" AS (
 	SELECT
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -113,6 +117,7 @@ CREATE VIEW "overview_occupation" AS (
 	SELECT
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -144,6 +149,7 @@ CREATE VIEW "overview_relationship" AS (
 	SELECT
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -175,6 +181,7 @@ CREATE VIEW "overview_race" AS (
 	SELECT
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -206,6 +213,7 @@ CREATE VIEW "overview_sex" AS (
 	SELECT
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -237,6 +245,7 @@ CREATE VIEW "overview_native-country" AS (
 	SELECT
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -284,6 +293,7 @@ CREATE VIEW "overview_education-num" AS (
 	SELECT
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
+		(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 		tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 	FROM
@@ -313,6 +323,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp.*,
 			count(b.*)::double precision/tmp.count AS "p_>50k",
+			(1-count(b.*)::double precision/tmp.count) AS "p_<=50k",
 			-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
 			tmp.p*-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "p_h_conditional"
 		FROM
@@ -337,6 +348,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp2.*,
 			count(b.*)::double precision/tmp2.count AS "p_>50k",
+			(1-count(b.*)::double precision/tmp2.count) AS "p_<=50k",
 			-(count(b.*)::double precision/tmp2.count * log(count(b.*)::double precision/tmp2.count) + ((tmp2.count-count(b.*)::double precision)/tmp2.count * log((tmp2.count - count(b.*))::double precision/tmp2.count)) ) AS "h_conditional",
 			tmp2.p*-(count(b.*)::double precision/tmp2.count * log(count(b.*)::double precision/tmp2.count) + ((tmp2.count-count(b.*)::double precision)/tmp2.count * log((tmp2.count - count(b.*))::double precision/tmp2.count)) ) AS "p_h_conditional"
 		FROM
@@ -361,6 +373,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp3.*,
 			count(b.*)::double precision/tmp3.count AS "p_>50k",
+			(1-count(b.*)::double precision/tmp3.count) AS "p_<=50k",
 			-(count(b.*)::double precision/tmp3.count * log(count(b.*)::double precision/tmp3.count) + ((tmp3.count-count(b.*)::double precision)/tmp3.count * log((tmp3.count - count(b.*))::double precision/tmp3.count)) ) AS "h_conditional",
 			tmp3.p*-(count(b.*)::double precision/tmp3.count * log(count(b.*)::double precision/tmp3.count) + ((tmp3.count-count(b.*)::double precision)/tmp3.count * log((tmp3.count - count(b.*))::double precision/tmp3.count)) ) AS "p_h_conditional"
 		FROM
@@ -385,6 +398,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp4.*,
 			count(b.*)::double precision/tmp4.count AS "p_>50k",
+			(1-count(b.*)::double precision/tmp4.count) AS "p_<=50k",
 			-(count(b.*)::double precision/tmp4.count * log(count(b.*)::double precision/tmp4.count) + ((tmp4.count-count(b.*)::double precision)/tmp4.count * log((tmp4.count - count(b.*))::double precision/tmp4.count)) ) AS "h_conditional",
 			tmp4.p*-(count(b.*)::double precision/tmp4.count * log(count(b.*)::double precision/tmp4.count) + ((tmp4.count-count(b.*)::double precision)/tmp4.count * log((tmp4.count - count(b.*))::double precision/tmp4.count)) ) AS "p_h_conditional"
 		FROM
@@ -409,6 +423,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp5.*,
 			count(b.*)::double precision/tmp5.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp5.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp5.count * log(count(b.*)::double precision/tmp5.count) + ((tmp5.count-count(b.*)::double precision)/tmp5.count * log((tmp5.count - count(b.*))::double precision/tmp5.count)) ) AS "h_conditional",
 			tmp5.p*-(count(b.*)::double precision/tmp5.count * log(count(b.*)::double precision/tmp5.count) + ((tmp5.count-count(b.*)::double precision)/tmp5.count * log((tmp5.count - count(b.*))::double precision/tmp5.count)) ) AS "p_h_conditional"
 		FROM
@@ -433,6 +448,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp6.*,
 			count(b.*)::double precision/tmp6.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp6.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp6.count * log(count(b.*)::double precision/tmp6.count) + ((tmp6.count-count(b.*)::double precision)/tmp6.count * log((tmp6.count - count(b.*))::double precision/tmp6.count)) ) AS "h_conditional",
 			tmp6.p*-(count(b.*)::double precision/tmp6.count * log(count(b.*)::double precision/tmp6.count) + ((tmp6.count-count(b.*)::double precision)/tmp6.count * log((tmp6.count - count(b.*))::double precision/tmp6.count)) ) AS "p_h_conditional"
 		FROM
@@ -457,6 +473,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp7.*,
 			count(b.*)::double precision/tmp7.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp7.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp7.count * log(count(b.*)::double precision/tmp7.count) + ((tmp7.count-count(b.*)::double precision)/tmp7.count * log((tmp7.count - count(b.*))::double precision/tmp7.count)) ) AS "h_conditional",
 			tmp7.p*-(count(b.*)::double precision/tmp7.count * log(count(b.*)::double precision/tmp7.count) + ((tmp7.count-count(b.*)::double precision)/tmp7.count * log((tmp7.count - count(b.*))::double precision/tmp7.count)) ) AS "p_h_conditional"
 		FROM
@@ -481,6 +498,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp8.*,
 			count(b.*)::double precision/tmp8.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp8.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp8.count * log(count(b.*)::double precision/tmp8.count) + ((tmp8.count-count(b.*)::double precision)/tmp8.count * log((tmp8.count - count(b.*))::double precision/tmp8.count)) ) AS "h_conditional",
 			tmp8.p*-(count(b.*)::double precision/tmp8.count * log(count(b.*)::double precision/tmp8.count) + ((tmp8.count-count(b.*)::double precision)/tmp8.count * log((tmp8.count - count(b.*))::double precision/tmp8.count)) ) AS "p_h_conditional"
 		FROM
@@ -505,6 +523,7 @@ CREATE VIEW "overview_age" AS (
 		SELECT
 			tmp9.*,
 			count(b.*)::double precision/tmp9.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp9.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp9.count * log(count(b.*)::double precision/tmp9.count) + ((tmp9.count-count(b.*)::double precision)/tmp9.count * log((tmp9.count - count(b.*))::double precision/tmp9.count)) ) AS "h_conditional",
 			tmp9.p*-(count(b.*)::double precision/tmp9.count * log(count(b.*)::double precision/tmp9.count) + ((tmp9.count-count(b.*)::double precision)/tmp9.count * log((tmp9.count - count(b.*))::double precision/tmp9.count)) ) AS "p_h_conditional"
 		FROM
@@ -551,6 +570,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp1.*,
 			count(b.*)::double precision/tmp1.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp1.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp1.count * log(count(b.*)::double precision/tmp1.count) + ((tmp1.count-count(b.*)::double precision)/tmp1.count * log((tmp1.count - count(b.*))::double precision/tmp1.count)) ) AS "h_conditional",
 			tmp1.p*-(count(b.*)::double precision/tmp1.count * log(count(b.*)::double precision/tmp1.count) + ((tmp1.count-count(b.*)::double precision)/tmp1.count * log((tmp1.count - count(b.*))::double precision/tmp1.count)) ) AS "p_h_conditional"
 		FROM
@@ -575,6 +595,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp2.*,
 			count(b.*)::double precision/tmp2.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp2.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp2.count * log(count(b.*)::double precision/tmp2.count) + ((tmp2.count-count(b.*)::double precision)/tmp2.count * log((tmp2.count - count(b.*))::double precision/tmp2.count)) ) AS "h_conditional",
 			tmp2.p*-(count(b.*)::double precision/tmp2.count * log(count(b.*)::double precision/tmp2.count) + ((tmp2.count-count(b.*)::double precision)/tmp2.count * log((tmp2.count - count(b.*))::double precision/tmp2.count)) ) AS "p_h_conditional"
 		FROM
@@ -599,6 +620,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp3.*,
 			count(b.*)::double precision/tmp3.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp3.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp3.count * log(count(b.*)::double precision/tmp3.count) + ((tmp3.count-count(b.*)::double precision)/tmp3.count * log((tmp3.count - count(b.*))::double precision/tmp3.count)) ) AS "h_conditional",
 			tmp3.p*-(count(b.*)::double precision/tmp3.count * log(count(b.*)::double precision/tmp3.count) + ((tmp3.count-count(b.*)::double precision)/tmp3.count * log((tmp3.count - count(b.*))::double precision/tmp3.count)) ) AS "p_h_conditional"
 		FROM
@@ -623,6 +645,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp4.*,
 			count(b.*)::double precision/tmp4.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp4.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp4.count * log(count(b.*)::double precision/tmp4.count) + ((tmp4.count-count(b.*)::double precision)/tmp4.count * log((tmp4.count - count(b.*))::double precision/tmp4.count)) ) AS "h_conditional",
 			tmp4.p*-(count(b.*)::double precision/tmp4.count * log(count(b.*)::double precision/tmp4.count) + ((tmp4.count-count(b.*)::double precision)/tmp4.count * log((tmp4.count - count(b.*))::double precision/tmp4.count)) ) AS "p_h_conditional"
 		FROM
@@ -647,6 +670,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp5.*,
 			count(b.*)::double precision/tmp5.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp5.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp5.count * log(count(b.*)::double precision/tmp5.count) + ((tmp5.count-count(b.*)::double precision)/tmp5.count * log((tmp5.count - count(b.*))::double precision/tmp5.count)) ) AS "h_conditional",
 			tmp5.p*-(count(b.*)::double precision/tmp5.count * log(count(b.*)::double precision/tmp5.count) + ((tmp5.count-count(b.*)::double precision)/tmp5.count * log((tmp5.count - count(b.*))::double precision/tmp5.count)) ) AS "p_h_conditional"
 		FROM
@@ -671,6 +695,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp6.*,
 			count(b.*)::double precision/tmp6.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp6.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp6.count * log(count(b.*)::double precision/tmp6.count) + ((tmp6.count-count(b.*)::double precision)/tmp6.count * log((tmp6.count - count(b.*))::double precision/tmp6.count)) ) AS "h_conditional",
 			tmp6.p*-(count(b.*)::double precision/tmp6.count * log(count(b.*)::double precision/tmp6.count) + ((tmp6.count-count(b.*)::double precision)/tmp6.count * log((tmp6.count - count(b.*))::double precision/tmp6.count)) ) AS "p_h_conditional"
 		FROM
@@ -695,6 +720,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp7.*,
 			count(b.*)::double precision/tmp7.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp7.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp7.count * log(count(b.*)::double precision/tmp7.count) + ((tmp7.count-count(b.*)::double precision)/tmp7.count * log((tmp7.count - count(b.*))::double precision/tmp7.count)) ) AS "h_conditional",
 			tmp7.p*-(count(b.*)::double precision/tmp7.count * log(count(b.*)::double precision/tmp7.count) + ((tmp7.count-count(b.*)::double precision)/tmp7.count * log((tmp7.count - count(b.*))::double precision/tmp7.count)) ) AS "p_h_conditional"
 		FROM
@@ -719,6 +745,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp8.*,
 			count(b.*)::double precision/tmp8.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp8.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp8.count * log(count(b.*)::double precision/tmp8.count) + ((tmp8.count-count(b.*)::double precision)/tmp8.count * log((tmp8.count - count(b.*))::double precision/tmp8.count)) ) AS "h_conditional",
 			tmp8.p*-(count(b.*)::double precision/tmp8.count * log(count(b.*)::double precision/tmp8.count) + ((tmp8.count-count(b.*)::double precision)/tmp8.count * log((tmp8.count - count(b.*))::double precision/tmp8.count)) ) AS "p_h_conditional"
 		FROM
@@ -743,6 +770,7 @@ CREATE VIEW "overview_hours-per-week" AS (
 		SELECT
 			tmp9.*,
 			count(b.*)::double precision/tmp9.count AS "p_>50k",
+			1-count(b.*)::double precision/tmp9.count AS "p_<=50k",
 			-(count(b.*)::double precision/tmp9.count * log(count(b.*)::double precision/tmp9.count) + ((tmp9.count-count(b.*)::double precision)/tmp9.count * log((tmp9.count - count(b.*))::double precision/tmp9.count)) ) AS "h_conditional",
 			tmp9.p*-(count(b.*)::double precision/tmp9.count * log(count(b.*)::double precision/tmp9.count) + ((tmp9.count-count(b.*)::double precision)/tmp9.count * log((tmp9.count - count(b.*))::double precision/tmp9.count)) ) AS "p_h_conditional"
 		FROM
