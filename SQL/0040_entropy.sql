@@ -1,6 +1,8 @@
 DROP VIEW IF EXISTS "entropy-and-informationgain" CASCADE;
 CREATE VIEW "entropy-and-informationgain" AS (
+	--show the entropy and information gain per column
 	WITH entrop AS (
+		--in a subselect so we can do the ordering later
 		SELECT
 			'age'::varchar(16) AS variable,
 			-SUM("p_log_p") AS h,

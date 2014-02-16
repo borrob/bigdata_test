@@ -3,19 +3,21 @@
 DROP VIEW IF EXISTS "overview_workclass" CASCADE;
 CREATE VIEW "overview_workclass" AS (
 	WITH tmp AS (
-	SELECT
-		a.workclass,
-		count(a.*),
-		b.numrec,count(a.*)::double precision/b.numrec AS p,
-		count(a.*)::double precision/b.numrec * log(count(a.*)::double precision/b.numrec) AS p_log_p
-	FROM 
-		adults as a,
-		(SELECT COUNT(*) AS numrec FROM adults) AS b
-	GROUP BY
-		workclass,
-		b.numrec
+		--group by the workclass and return the counts and the change p
+		SELECT
+			a.workclass,
+			count(a.*),
+			b.numrec,count(a.*)::double precision/b.numrec AS p,
+			count(a.*)::double precision/b.numrec * log(count(a.*)::double precision/b.numrec) AS p_log_p
+		FROM 
+			adults as a,
+			(SELECT COUNT(*) AS numrec FROM adults) AS b
+		GROUP BY
+			workclass,
+			b.numrec
 	)
 	SELECT
+		--group by workclass and add info on recordcount, chances, the >50l chance and the conditonal entropy
 		tmp.*,
 		count(b.*)::double precision/tmp.count AS "p_>50k",
 		-(count(b.*)::double precision/tmp.count * log(count(b.*)::double precision/tmp.count) + ((tmp.count-count(b.*)::double precision)/tmp.count * log((tmp.count - count(b.*))::double precision/tmp.count)) ) AS "h_conditional",
@@ -295,6 +297,7 @@ CREATE VIEW "overview_education-num" AS (
 		tmp."education-num", tmp.count, tmp.p,tmp.numrec, tmp."p_log_p"
 );
 --now do the continous columns
+--we group them manually
 DROP VIEW IF EXISTS "overview_age" CASCADE;
 CREATE VIEW "overview_age" AS (
 	WITH tmp AS (
