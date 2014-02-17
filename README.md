@@ -14,3 +14,7 @@ There is a useful set repository with data sets, provided by the UCI Machine Lea
 Technology
 ----------
 I'm using PostGreSQL the manage the data. It all runs pretty fine on my BeagleBone Black.
+
+Todo
+----
+There are still a number of todos and fixes left. For instance: there need to be some testing and statistics on prediction accuracy. We also need to upgrade the user friendlyness. Perhaps make a nice http post / rest interdace?
